@@ -38,9 +38,9 @@ public class EnemyDesignerWindow : EditorWindow {
 	}
 
 	public static void InitData() {
-		mageData = (MageData)ScriptableObject.CreateInstance(typeof(MageData));
-		rogueData = (RogueData)ScriptableObject.CreateInstance(typeof(RogueData));
-		warriorData = (WarriorData)ScriptableObject.CreateInstance(typeof(WarriorData));
+		mageData = (MageData)CreateInstance(typeof(MageData));
+		rogueData = (RogueData)CreateInstance(typeof(RogueData));
+		warriorData = (WarriorData)CreateInstance(typeof(WarriorData));
 	}
 
 	private void InitTextures() {

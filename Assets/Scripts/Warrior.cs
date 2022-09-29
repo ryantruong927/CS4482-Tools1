@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Warrior : MonoBehaviour {
-	public WarriorData WarriorData;
+	public WarriorData warriorData;
 }

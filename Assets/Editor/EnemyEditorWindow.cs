@@ -10,7 +10,6 @@ public class EnemyEditorWindow : EditorWindow {
 		WARRIOR,
 		ROGUE
 	}
-
 	private static SettingsType dataSetting;
 
 	private Texture2D headerSectionTexture;
@@ -29,6 +28,7 @@ public class EnemyEditorWindow : EditorWindow {
 
 	private GameObject prefab;
 	private CharacterData characterData;
+	private CharacterData editedData;
 	private string characterName;
 
 	private float prefabSelectionSectionHeight = 60;
@@ -86,12 +86,12 @@ public class EnemyEditorWindow : EditorWindow {
 	private void DrawLayouts() {
 		headerSection.x = 0;
 		headerSection.y = 0;
-		headerSection.width = Screen.width;
+		headerSection.width = position.width;
 		headerSection.height = 50;
 
 		prefabSelectionSection.x = 0;
 		prefabSelectionSection.y = 50;
-		prefabSelectionSection.width = Screen.width;
+		prefabSelectionSection.width = position.width;
 		prefabSelectionSection.height = prefabSelectionSectionHeight;
 
 		GUI.DrawTexture(headerSection, headerSectionTexture);
@@ -100,8 +100,8 @@ public class EnemyEditorWindow : EditorWindow {
 		if (isLoaded) {
 			settingsSection.x = 0;
 			settingsSection.y = headerSection.height + prefabSelectionSection.height;
-			settingsSection.width = Screen.width;
-			settingsSection.height = Screen.height - headerSection.height - prefabSelectionSection.height;
+			settingsSection.width = position.width;
+			settingsSection.height = position.height - headerSection.height - prefabSelectionSection.height;
 
 			settingsIconSection.x = (settingsSection.width / 2f) - iconSize / 2f;
 			settingsIconSection.y = settingsSection.y;
@@ -122,7 +122,7 @@ public class EnemyEditorWindow : EditorWindow {
 	}
 
 	private void DrawPrefabSelection() {
-		bool isSelected = false;
+		bool isSelected;
 
 		GUILayout.BeginArea(prefabSelectionSection);
 		EditorGUILayout.BeginHorizontal();
@@ -154,6 +154,7 @@ public class EnemyEditorWindow : EditorWindow {
 					characterData = prefab.GetComponent<Warrior>().warriorData;
 				}
 
+				editedData = cloneData(characterData);
 				characterName = characterData.name;
 				isLoaded = true;
 			}
@@ -161,10 +162,8 @@ public class EnemyEditorWindow : EditorWindow {
 
 		EditorGUILayout.EndHorizontal();
 
-		if (!isSelected) {
+		if (!isSelected)
 			EditorGUILayout.HelpBox("A [Prefab] needs to be selected before it can be edited.", MessageType.Warning);
-			isSelected = false;
-		}
 
 		GUILayout.EndArea();
 	}
@@ -179,19 +178,19 @@ public class EnemyEditorWindow : EditorWindow {
 		switch (dataSetting) {
 			case SettingsType.MAGE:
 				style = "Mage";
-				 
+
 				GUILayout.Label("Mage", skin.GetStyle(style + "Header"));
 
 				// damage type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Damage", skin.GetStyle(style + "Field"));
-				((MageData)characterData).damageType = (MageDamageType)EditorGUILayout.EnumPopup(((MageData)characterData).damageType);
+				((MageData)editedData).damageType = (MageDamageType)EditorGUILayout.EnumPopup(((MageData)editedData).damageType);
 				EditorGUILayout.EndHorizontal();
 
 				// weapon type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Weapon", skin.GetStyle(style + "Field"));
-				((MageData)characterData).weaponType = (MageWeaponType)EditorGUILayout.EnumPopup(((MageData)characterData).weaponType);
+				((MageData)editedData).weaponType = (MageWeaponType)EditorGUILayout.EnumPopup(((MageData)editedData).weaponType);
 				EditorGUILayout.EndHorizontal();
 
 				break;
@@ -203,13 +202,13 @@ public class EnemyEditorWindow : EditorWindow {
 				// strategy type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Strategy", skin.GetStyle(style + "Field"));
-				((RogueData)characterData).strategyType = (RogueStrategyType)EditorGUILayout.EnumPopup(((RogueData)characterData).strategyType);
+				((RogueData)editedData).strategyType = (RogueStrategyType)EditorGUILayout.EnumPopup(((RogueData)editedData).strategyType);
 				EditorGUILayout.EndHorizontal();
 
 				// weapon type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Weapon", skin.GetStyle(style + "Field"));
-				((RogueData)characterData).weaponType = (RogueWeaponType)EditorGUILayout.EnumPopup(((RogueData)characterData).weaponType);
+				((RogueData)editedData).weaponType = (RogueWeaponType)EditorGUILayout.EnumPopup(((RogueData)editedData).weaponType);
 				EditorGUILayout.EndHorizontal();
 
 				break;
@@ -221,13 +220,13 @@ public class EnemyEditorWindow : EditorWindow {
 				// class type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Class", skin.GetStyle(style + "Field"));
-				((WarriorData)characterData).classType = (WarriorClassType)EditorGUILayout.EnumPopup(((WarriorData)characterData).classType);
+				((WarriorData)editedData).classType = (WarriorClassType)EditorGUILayout.EnumPopup(((WarriorData)editedData).classType);
 				EditorGUILayout.EndHorizontal();
 
 				// weapon type
 				EditorGUILayout.BeginHorizontal();
 				GUILayout.Label("Weapon", skin.GetStyle(style + "Field"));
-				((WarriorData)characterData).weaponType = (WarriorWeaponType)EditorGUILayout.EnumPopup(((WarriorData)characterData).weaponType);
+				((WarriorData)editedData).weaponType = (WarriorWeaponType)EditorGUILayout.EnumPopup(((WarriorData)editedData).weaponType);
 				EditorGUILayout.EndHorizontal();
 
 				break;
@@ -236,42 +235,42 @@ public class EnemyEditorWindow : EditorWindow {
 		// prefab
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Prefab", skin.GetStyle(style + "Field"));
-		characterData.prefab = (GameObject)EditorGUILayout.ObjectField(characterData.prefab, typeof(GameObject), false);
+		editedData.prefab = (GameObject)EditorGUILayout.ObjectField(editedData.prefab, typeof(GameObject), false);
 		EditorGUILayout.EndHorizontal();
 
 		// name
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Name", skin.GetStyle(style + "Field"));
-		characterData.name = EditorGUILayout.TextField(characterData.name);
+		editedData.name = EditorGUILayout.TextField(editedData.name);
 		EditorGUILayout.EndHorizontal();
 
 		// max health
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Max Health", skin.GetStyle(style + "Field"));
-		characterData.maxHealth = EditorGUILayout.FloatField(characterData.maxHealth);
+		editedData.maxHealth = EditorGUILayout.FloatField(editedData.maxHealth);
 		EditorGUILayout.EndHorizontal();
 
 		// max energy
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Max Energy", skin.GetStyle(style + "Field"));
-		characterData.maxEnergy = EditorGUILayout.FloatField(characterData.maxEnergy);
+		editedData.maxEnergy = EditorGUILayout.FloatField(editedData.maxEnergy);
 		EditorGUILayout.EndHorizontal();
 
 		// power
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Power", skin.GetStyle(style + "Field"));
-		characterData.power = EditorGUILayout.Slider(characterData.power, 0, 100);
+		editedData.power = EditorGUILayout.Slider(editedData.power, 0, 100);
 		EditorGUILayout.EndHorizontal();
 
 		// crit chance
 		EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Crit Chance %", skin.GetStyle(style + "Field"));
-		characterData.critChance = EditorGUILayout.Slider(characterData.critChance, 0, characterData.power);
+		editedData.critChance = EditorGUILayout.Slider(editedData.critChance, 0, editedData.power);
 		EditorGUILayout.EndHorizontal();
 
-		if (characterData.prefab == null)
+		if (editedData.prefab == null)
 			EditorGUILayout.HelpBox("This enemy needs a [Prefab] before it can be created.", MessageType.Warning);
-		else if (characterData.name == null || characterData.name.Length < 1)
+		else if (editedData.name == null || editedData.name.Length < 1)
 			EditorGUILayout.HelpBox("This enemy needs a [Name] before it can be created.", MessageType.Warning);
 		else if (GUILayout.Button("Edit", GUILayout.Height(30)))
 			SaveCharacterData();
@@ -281,66 +280,106 @@ public class EnemyEditorWindow : EditorWindow {
 
 	private void SaveCharacterData() {
 		string prefabPath = AssetDatabase.GetAssetPath(prefab);
-		string newPrefabPath = "Assets/Prefabs/Characters/";
-		string dataPath = "Assets/Resources/CharacterData/Data/";
-		string newDataPath = "Assets/Resources/CharacterData/Data/";
+		string newPrefabPath;
+		string dataPath = AssetDatabase.GetAssetPath(characterData);
+		string newDataPath;
 
 		switch (dataSetting) {
 			case SettingsType.MAGE:
-				newPrefabPath += "Mage/" + characterData.name + ".prefab";
-				dataPath += "Mage/" + characterName + ".asset";
-				newDataPath += "Mage/" + characterData.name + ".asset";
+				newPrefabPath = editedData.name + ".prefab";
+				newDataPath = editedData.name + ".asset";
 
 				MageData mageData = (MageData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(MageData));
-				mageData = (MageData)characterData;
-				System.IO.File.Move(dataPath, newDataPath);
-				System.IO.File.Move(dataPath + ".meta", newDataPath + ".meta");
-
-				GameObject magePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
-				magePrefab.GetComponent<Mage>().mageData = (MageData)characterData;
-				System.IO.File.Move(prefabPath, newPrefabPath);
-				EditorUtility.SetDirty(magePrefab);
+				cloneData(editedData, mageData);
+				EditorUtility.SetDirty(mageData);
 				AssetDatabase.SaveAssets();
 				AssetDatabase.Refresh();
 
+				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
+				AssetDatabase.Refresh();
+
+				GameObject magePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
+				magePrefab.GetComponent<Mage>().mageData = mageData;
+				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
+				AssetDatabase.Refresh();
+
+				characterData = mageData;
+
 				break;
 			case SettingsType.ROGUE:
-				dataPath += "Rogue/" + EnemyDesignerWindow.RogueInfo.name + ".asset";
-				AssetDatabase.CreateAsset(EnemyDesignerWindow.RogueInfo, dataPath);
+				newPrefabPath = editedData.name + ".prefab";
+				newDataPath = editedData.name + ".asset";
 
-				newPrefabPath += "Rogue/" + EnemyDesignerWindow.RogueInfo.name + ".prefab";
-				prefabPath = AssetDatabase.GetAssetPath(EnemyDesignerWindow.RogueInfo.prefab);
+				RogueData rogueData = (RogueData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(RogueData));
+				cloneData(editedData, rogueData);
+				EditorUtility.SetDirty(rogueData);
+				AssetDatabase.SaveAssets();
+				AssetDatabase.Refresh();
+
+				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
+				AssetDatabase.Refresh();
 
 				GameObject roguePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
+				roguePrefab.GetComponent<Rogue>().rogueData = rogueData;
+				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
+				AssetDatabase.Refresh();
 
-				if (!roguePrefab.GetComponent<Rogue>())
-					roguePrefab.AddComponent(typeof(Rogue));
-
-				roguePrefab.GetComponent<Rogue>().rogueData = EnemyDesignerWindow.RogueInfo;
-
-				System.IO.File.Move(prefabPath, newPrefabPath);
+				characterData = rogueData;
 
 				break;
 			case SettingsType.WARRIOR:
-				dataPath += "Warrior/" + EnemyDesignerWindow.WarriorInfo.name + ".asset";
-				AssetDatabase.CreateAsset(EnemyDesignerWindow.WarriorInfo, dataPath);
+				newPrefabPath = editedData.name + ".prefab";
+				newDataPath = editedData.name + ".asset";
 
-				newPrefabPath += "Warrior/" + EnemyDesignerWindow.WarriorInfo.name + ".prefab";
-				prefabPath = AssetDatabase.GetAssetPath(EnemyDesignerWindow.WarriorInfo.prefab);
+				WarriorData warriorData = (WarriorData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(WarriorData));
+				cloneData(editedData, warriorData);
+				EditorUtility.SetDirty(warriorData);
+				AssetDatabase.SaveAssets();
+				AssetDatabase.Refresh();
+
+				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
+				AssetDatabase.Refresh();
 
 				GameObject warriorPrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
+				warriorPrefab.GetComponent<Warrior>().warriorData = warriorData;
+				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
+				AssetDatabase.Refresh();
 
-				if (!warriorPrefab.GetComponent<Warrior>())
-					warriorPrefab.AddComponent(typeof(Warrior));
-
-				warriorPrefab.GetComponent<Warrior>().warriorData = EnemyDesignerWindow.WarriorInfo;
-
-				System.IO.File.Move(prefabPath, newPrefabPath);
+				characterData = warriorData;
 
 				break;
 		}
+	}
 
-		AssetDatabase.SaveAssets();
-		AssetDatabase.Refresh();
+	private CharacterData cloneData(CharacterData sourceData, CharacterData destinationData = null) {
+		switch (dataSetting) {
+			case SettingsType.MAGE:
+				if (destinationData == null)
+					destinationData = CreateInstance<MageData>();
+				((MageData)destinationData).damageType = ((MageData)sourceData).damageType;
+				((MageData)destinationData).weaponType = ((MageData)sourceData).weaponType;
+				break;
+			case SettingsType.ROGUE:
+				if (destinationData == null)
+					destinationData = CreateInstance<RogueData>();
+				((RogueData)destinationData).strategyType = ((RogueData)sourceData).strategyType;
+				((RogueData)destinationData).weaponType = ((RogueData)sourceData).weaponType;
+				break;
+			case SettingsType.WARRIOR:
+				if (destinationData == null)
+					destinationData = CreateInstance<WarriorData>();
+				((WarriorData)destinationData).classType = ((WarriorData)sourceData).classType;
+				((WarriorData)destinationData).weaponType = ((WarriorData)sourceData).weaponType;
+				break;
+		}
+
+		destinationData.prefab = sourceData.prefab;
+		destinationData.name = sourceData.name;
+		destinationData.maxHealth = sourceData.maxHealth;
+		destinationData.maxEnergy = sourceData.maxEnergy;
+		destinationData.power = sourceData.power;
+		destinationData.critChance = sourceData.critChance;
+
+		return destinationData;
 	}
 }

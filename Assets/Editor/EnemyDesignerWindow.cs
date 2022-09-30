@@ -79,33 +79,33 @@ public class EnemyDesignerWindow : EditorWindow {
 	private void DrawLayouts() {
 		headerSection.x = 0;
 		headerSection.y = 0;
-		headerSection.width = Screen.width;
+		headerSection.width = position.width;
 		headerSection.height = 50;
 
 		mageSection.x = 0;
 		mageSection.y = 50;
-		mageSection.width = Screen.width / 3f;
-		mageSection.height = Screen.height - 50;
+		mageSection.width = position.width / 3f;
+		mageSection.height = position.height - 50;
 
 		mageIconSection.x = (mageSection.width / 2f) - iconSize / 2f;
 		mageIconSection.y = mageSection.y;
 		mageIconSection.width = iconSize;
 		mageIconSection.height = iconSize;
 
-		rogueSection.x = Screen.width / 3f;
+		rogueSection.x = position.width / 3f;
 		rogueSection.y = 50;
-		rogueSection.width = Screen.width / 3f;
-		rogueSection.height = Screen.height - 50;
+		rogueSection.width = position.width / 3f;
+		rogueSection.height = position.height - 50;
 
 		rogueIconSection.x = (rogueSection.x + rogueSection.width / 2f) - iconSize / 2f;
 		rogueIconSection.y = rogueSection.y;
 		rogueIconSection.width = iconSize;
 		rogueIconSection.height = iconSize;
 
-		warriorSection.x = (Screen.width / 3f) * 2;
+		warriorSection.x = (position.width / 3f) * 2;
 		warriorSection.y = 50;
-		warriorSection.width = Screen.width / 3f;
-		warriorSection.height = Screen.height - 50;
+		warriorSection.width = position.width / 3f;
+		warriorSection.height = position.height - 50;
 
 		warriorIconSection.x = (warriorSection.x + warriorSection.width / 2f) - iconSize / 2f;
 		warriorIconSection.y = warriorSection.y;

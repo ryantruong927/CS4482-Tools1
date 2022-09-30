@@ -10,8 +10,8 @@ public class GeneralSettings : EditorWindow {
 		WARRIOR,
 		ROGUE
 	}
-
 	private static SettingsType dataSetting;
+
 	private static GeneralSettings window;
 
 	public static void OpenWindow(SettingsType setting) {

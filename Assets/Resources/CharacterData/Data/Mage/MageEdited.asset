@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04b3bce19265d264facc80dfca7d96da, type: 3}
-  m_Name: EE2
+  m_Script: {fileID: 11500000, guid: 92ed306e3c79b404c8bac4c21035dc40, type: 3}
+  m_Name: MageEdited
   m_EditorClassIdentifier: 
   prefab: {fileID: 635519230996361027, guid: e24c794e60489854497669916711261d, type: 3}
-  name: EE2
-  maxHealth: 67
-  maxEnergy: 13
-  power: 25.8
-  critChance: 25.8
-  classType: 0
-  weaponType: 2
+  name: MageEdited
+  maxHealth: 20
+  maxEnergy: 20
+  power: 19.1
+  critChance: 17.3
+  damageType: 0
+  weaponType: 0

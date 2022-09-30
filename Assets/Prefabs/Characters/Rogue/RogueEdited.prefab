@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 26432277356892923}
   - component: {fileID: 3219874198758920363}
   - component: {fileID: 4722658250992858088}
-  - component: {fileID: 2122518611827168233}
+  - component: {fileID: 8788985224039699264}
   m_Layer: 0
-  m_Name: DD2
+  m_Name: RogueEdited
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2122518611827168233
+--- !u!114 &8788985224039699264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce18537c71093284f8d21f88820ae77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rogueData: {fileID: 11400000, guid: e4fc7cea857b92d408642829725c372d, type: 2}
+  rogueData: {fileID: 11400000, guid: 7e75747ac5e04064382a6ce96a0f2855, type: 2}

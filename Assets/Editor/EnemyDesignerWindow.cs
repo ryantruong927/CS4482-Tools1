@@ -77,6 +77,9 @@ public class EnemyDesignerWindow : EditorWindow {
 	}
 
 	private void DrawLayouts() {
+		// tutorial uses Screen instead of position, but this can produce problems on some devices since Screen uses the display's dimensions
+		// therefore, position is used since the scaling is based on its own window
+
 		headerSection.x = 0;
 		headerSection.y = 0;
 		headerSection.width = position.width;

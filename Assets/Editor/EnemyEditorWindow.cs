@@ -57,6 +57,7 @@ public class EnemyEditorWindow : EditorWindow {
 		prefabSelectionSectionTexture.Apply();
 	}
 
+	// Settings are intialized after loading because I decided to style the window based on the character type.
 	private void InitSettings() {
 		switch (dataSetting) {
 			case SettingsType.MAGE: // mage
@@ -79,6 +80,7 @@ public class EnemyEditorWindow : EditorWindow {
 		DrawHeader();
 		DrawPrefabSelection();
 
+		// only draw settings if a character was selected and loaded
 		if (isLoaded)
 			DrawSettings();
 	}
@@ -97,7 +99,9 @@ public class EnemyEditorWindow : EditorWindow {
 		GUI.DrawTexture(headerSection, headerSectionTexture);
 		GUI.DrawTexture(prefabSelectionSection, prefabSelectionSectionTexture);
 
+		// no need to draw settings layout if it is not ready yet
 		if (isLoaded) {
+			// settings must be resized based on prefab selection section due to popup
 			settingsSection.x = 0;
 			settingsSection.y = headerSection.height + prefabSelectionSection.height;
 			settingsSection.width = position.width;
@@ -129,45 +133,50 @@ public class EnemyEditorWindow : EditorWindow {
 
 		prefab = (GameObject)EditorGUILayout.ObjectField(prefab, typeof(GameObject), false);
 
+		// if prefab isn't selected, resize section to allow for popup
 		if (prefab == null) {
 			prefabSelectionSectionHeight = 60;
 			isSelected = false;
 		}
+		// else, resize section to remove extra space
 		else {
 			prefabSelectionSectionHeight = 18;
 			isSelected = true;
 
 			if (GUILayout.Button("Load", GUILayout.Height(18))) {
+				// check what type of character is selected based on what data they hold
+
 				if (prefab.GetComponent<Mage>() != null) {
 					dataSetting = SettingsType.MAGE;
-					InitSettings();
 					characterData = prefab.GetComponent<Mage>().mageData;
 				}
 				else if (prefab.GetComponent<Rogue>() != null) {
 					dataSetting = SettingsType.ROGUE;
-					InitSettings();
 					characterData = prefab.GetComponent<Rogue>().rogueData;
 				}
 				else if (prefab.GetComponent<Warrior>() != null) {
 					dataSetting = SettingsType.WARRIOR;
-					InitSettings();
 					characterData = prefab.GetComponent<Warrior>().warriorData;
 				}
 
+				// clone the data to prevent editing the data before clicking edit
 				editedData = cloneData(characterData);
-				characterName = characterData.name;
+				characterName = editedData.name;
+				InitSettings();
 				isLoaded = true;
 			}
 		}
 
 		EditorGUILayout.EndHorizontal();
 
+		// placed afterward to not be included in same horizontal as field/button
 		if (!isSelected)
 			EditorGUILayout.HelpBox("A [Prefab] needs to be selected before it can be edited.", MessageType.Warning);
 
 		GUILayout.EndArea();
 	}
 
+	// Similar to GeneralSettings.DrawSettings()
 	private void DrawSettings() {
 		string style = "";
 
@@ -280,28 +289,19 @@ public class EnemyEditorWindow : EditorWindow {
 
 	private void SaveCharacterData() {
 		string prefabPath = AssetDatabase.GetAssetPath(prefab);
-		string newPrefabPath;
+		string newPrefabPath = "";
 		string dataPath = AssetDatabase.GetAssetPath(characterData);
-		string newDataPath;
+		string newDataPath = "";
 
 		switch (dataSetting) {
 			case SettingsType.MAGE:
 				newPrefabPath = editedData.name + ".prefab";
 				newDataPath = editedData.name + ".asset";
 
+				// edit and save the data
 				MageData mageData = (MageData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(MageData));
 				cloneData(editedData, mageData);
 				EditorUtility.SetDirty(mageData);
-				AssetDatabase.SaveAssets();
-				AssetDatabase.Refresh();
-
-				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
-				AssetDatabase.Refresh();
-
-				GameObject magePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
-				magePrefab.GetComponent<Mage>().mageData = mageData;
-				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
-				AssetDatabase.Refresh();
 
 				characterData = mageData;
 
@@ -313,16 +313,6 @@ public class EnemyEditorWindow : EditorWindow {
 				RogueData rogueData = (RogueData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(RogueData));
 				cloneData(editedData, rogueData);
 				EditorUtility.SetDirty(rogueData);
-				AssetDatabase.SaveAssets();
-				AssetDatabase.Refresh();
-
-				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
-				AssetDatabase.Refresh();
-
-				GameObject roguePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
-				roguePrefab.GetComponent<Rogue>().rogueData = rogueData;
-				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
-				AssetDatabase.Refresh();
 
 				characterData = rogueData;
 
@@ -334,42 +324,53 @@ public class EnemyEditorWindow : EditorWindow {
 				WarriorData warriorData = (WarriorData)AssetDatabase.LoadAssetAtPath(dataPath, typeof(WarriorData));
 				cloneData(editedData, warriorData);
 				EditorUtility.SetDirty(warriorData);
-				AssetDatabase.SaveAssets();
-				AssetDatabase.Refresh();
-
-				Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
-				AssetDatabase.Refresh();
-
-				GameObject warriorPrefab = (GameObject)AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject));
-				warriorPrefab.GetComponent<Warrior>().warriorData = warriorData;
-				Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
-				AssetDatabase.Refresh();
 
 				characterData = warriorData;
 
 				break;
 		}
+
+		AssetDatabase.SaveAssets();
+		AssetDatabase.Refresh();
+
+		// rename the assets if the name was changed
+		if (characterName != editedData.name) {
+			Debug.Log(AssetDatabase.RenameAsset(dataPath, newDataPath));
+			AssetDatabase.Refresh();
+
+			Debug.Log(AssetDatabase.RenameAsset(prefabPath, newPrefabPath));
+			AssetDatabase.Refresh();
+
+			characterName = editedData.name;
+		}
 	}
 
+	// Returns a clone of or clones a CharacterData object.
 	private CharacterData cloneData(CharacterData sourceData, CharacterData destinationData = null) {
 		switch (dataSetting) {
 			case SettingsType.MAGE:
 				if (destinationData == null)
 					destinationData = CreateInstance<MageData>();
+
 				((MageData)destinationData).damageType = ((MageData)sourceData).damageType;
 				((MageData)destinationData).weaponType = ((MageData)sourceData).weaponType;
+
 				break;
 			case SettingsType.ROGUE:
 				if (destinationData == null)
 					destinationData = CreateInstance<RogueData>();
+
 				((RogueData)destinationData).strategyType = ((RogueData)sourceData).strategyType;
 				((RogueData)destinationData).weaponType = ((RogueData)sourceData).weaponType;
+
 				break;
 			case SettingsType.WARRIOR:
 				if (destinationData == null)
 					destinationData = CreateInstance<WarriorData>();
+
 				((WarriorData)destinationData).classType = ((WarriorData)sourceData).classType;
 				((WarriorData)destinationData).weaponType = ((WarriorData)sourceData).weaponType;
+
 				break;
 		}
 

@@ -33,7 +33,7 @@ public class EnemyDesignerWindow : EditorWindow {
 	public static RogueData RogueInfo { get { return rogueData; } }
 	public static WarriorData WarriorInfo { get { return warriorData; } }
 
-	float iconSize = 80;
+	private float iconSize = 80;
 
 	[MenuItem("Window/Enemy Designer")]
 	private static void OpenWindow() {
@@ -138,19 +138,18 @@ public class EnemyDesignerWindow : EditorWindow {
 
 		// damage type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Damage:", skin.GetStyle("MageField"));
+		GUILayout.Label("Damage", skin.GetStyle("MageField"));
 		mageData.damageType = (MageDamageType)EditorGUILayout.EnumPopup(mageData.damageType);
 		EditorGUILayout.EndHorizontal();
 
 		// weapon type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Weapon:", skin.GetStyle("MageField"));
+		GUILayout.Label("Weapon", skin.GetStyle("MageField"));
 		mageData.weaponType = (MageWeaponType)EditorGUILayout.EnumPopup(mageData.weaponType);
 		EditorGUILayout.EndHorizontal();
 
-		if (GUILayout.Button("Create!", GUILayout.Height(40))) {
+		if (GUILayout.Button("Create!", GUILayout.Height(40)))
 			GeneralSettings.OpenWindow(GeneralSettings.SettingsType.MAGE);
-		}
 
 		GUILayout.EndArea();
 	}
@@ -164,19 +163,18 @@ public class EnemyDesignerWindow : EditorWindow {
 
 		// strategy type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Strategy:", skin.GetStyle("RogueField"));
+		GUILayout.Label("Strategy", skin.GetStyle("RogueField"));
 		rogueData.strategyType = (RogueStrategyType)EditorGUILayout.EnumPopup(rogueData.strategyType);
 		EditorGUILayout.EndHorizontal();
 
 		// weapon type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Weapon:", skin.GetStyle("RogueField"));
+		GUILayout.Label("Weapon", skin.GetStyle("RogueField"));
 		rogueData.weaponType = (RogueWeaponType)EditorGUILayout.EnumPopup(rogueData.weaponType);
 		EditorGUILayout.EndHorizontal();
 
-		if (GUILayout.Button("Create!", GUILayout.Height(40))) {
+		if (GUILayout.Button("Create!", GUILayout.Height(40)))
 			GeneralSettings.OpenWindow(GeneralSettings.SettingsType.ROGUE);
-		}
 
 		GUILayout.EndArea();
 	}
@@ -190,19 +188,18 @@ public class EnemyDesignerWindow : EditorWindow {
 
 		// class type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Class:", skin.GetStyle("WarriorField"));
+		GUILayout.Label("Class", skin.GetStyle("WarriorField"));
 		warriorData.classType = (WarriorClassType)EditorGUILayout.EnumPopup(warriorData.classType);
 		EditorGUILayout.EndHorizontal();
 
 		// weapon type
 		EditorGUILayout.BeginHorizontal();
-		GUILayout.Label("Weapon:", skin.GetStyle("WarriorField"));
+		GUILayout.Label("Weapon", skin.GetStyle("WarriorField"));
 		warriorData.weaponType = (WarriorWeaponType)EditorGUILayout.EnumPopup(warriorData.weaponType);
 		EditorGUILayout.EndHorizontal();
 
-		if (GUILayout.Button("Create!", GUILayout.Height(40))) {
+		if (GUILayout.Button("Create!", GUILayout.Height(40)))
 			GeneralSettings.OpenWindow(GeneralSettings.SettingsType.WARRIOR);
-		}
 
 		GUILayout.EndArea();
 	}

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 26432277356892923}
   - component: {fileID: 3219874198758920363}
   - component: {fileID: 4722658250992858088}
-  - component: {fileID: 2233444499089992641}
+  - component: {fileID: 2122518611827168233}
   m_Layer: 0
-  m_Name: Mage
+  m_Name: DD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2233444499089992641
+--- !u!114 &2122518611827168233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 635519230996361027}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47622b75ad737744593900cde415252b, type: 3}
+  m_Script: {fileID: 11500000, guid: ce18537c71093284f8d21f88820ae77d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mageData: {fileID: 11400000, guid: bffacb12267464644aa75aa0ae81574d, type: 2}
+  rogueData: {fileID: 11400000, guid: e4fc7cea857b92d408642829725c372d, type: 2}
